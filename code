@@ -1,0 +1,72 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+torch.manual_seed(42)
+iris_df = pd.read_csv("https://content-media-cdn.codefinity.com/courses/1dd2b0f6-6ec0-40e6-a570-ed0ac2209666/section_2/iris.csv")
+X = iris_df.drop(columns=["species"]).values
+y = iris_df["species"].values
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Create tensors
+X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
+X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
+y_train_tensor = torch.tensor(y_train, dtype=torch.long)
+y_test_tensor =torch.tensor(y_test, dtype=torch.long)
+
+# Define the model
+class IrisModel(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        # Call the __init__ method of the parent class
+        hidden_size = 16
+        super().__init__()
+        # Define the layers
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, output_size)
+
+    # Pass data through layers with activation functions
+    def forward(self, x):
+        # Apply ReLU to the output of the hidden layer
+        x = nn.ReLU(self.fc1)
+        # Compute the output
+        x = nn.ReLU(self.fc2)
+        return x
+
+input_size = X.shape[1]
+output_size = len(iris_df["species"].unique())
+# Initialize the model
+model = IrisModel(input_size=___, hidden_size=___, output_size=___)
+# Define loss and optimizer
+criterion = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
+epochs = 100
+for epoch in range(epochs):
+    # Zero out gradients from the previous step
+    ___
+    # Compute predictions
+    y_pred = ___
+    # Compute the loss
+    loss = ___
+    # Compute gradients
+    ___
+    # Update parameters
+    ___
+
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch}, Loss: {loss.item()}")
+
+# Set the model to evaluation mode
+___
+# Disable gradient computation for evaluation
+___:
+    # Compute predictions on the test data
+    y_test_pred = ___
+    # Get predicted class labels
+    y_test_pred_labels = ___
+
+accuracy = (y_test_pred_labels == y_test_tensor).sum().item() / len(y_test) * 100
+print(f"Test accuracy: {accuracy:.2f}%")
